@@ -1,0 +1,9 @@
+ecom:
+  userServiceURL: ${ECOM_USER_SERVICE}
+  logDir: ./target
+    
+spring:
+  application:
+    name: ecom-main
+  
+

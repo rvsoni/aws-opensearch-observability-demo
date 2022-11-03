@@ -1,0 +1,40 @@
+ecom:
+  logDir: ./target
+      
+spring:
+  application:
+    name: ecom-user-address
+  datasource:
+    url: jdbc:postgresql://192.168.29.151:5432/ecom
+    password: ecom
+    username: ecom
+
+  jpa:
+    database: postgresql
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_schema: ecom
+        dialect: org.hibernate.dialect.PostgreSQL10Dialect
+        format_sql: true
+        generate_statistics: false
+        jdbc:
+          batch_size: 25
+        order_inserts: true
+        order_update: true
+    show-sql: false
+          
+server:
+  tomcat:
+    basedir: tomcat
+    accesslog:
+      enabled: true
+      rename-on-rotate: true
+      prefix: ${spring.application.name}_access_log
+      suffix: .txt
+      file-date-format: .yyyy-MM-dd
+      pattern: combined
+          
+          

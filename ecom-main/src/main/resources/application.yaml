@@ -1,0 +1,20 @@
+ecom:
+  userServiceURL: ${ECOM_USER_SERVICE}
+  paymentServiceURL: ${ECOM_PAYMENT_SERVICE}
+  logDir: ${ECOM_LOG_DIR}
+    
+spring:
+  application:
+    name: ecom-main
+  
+server:
+  tomcat:
+    basedir: tomcat
+    accesslog:
+      enabled: true
+      rename-on-rotate: true
+      prefix: ${spring.application.name}_access_log
+      suffix: .txt
+      file-date-format: .yyyy-MM-dd
+      pattern: combined
+          

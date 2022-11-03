@@ -1,0 +1,116 @@
+services:
+
+  otel-collector:
+    image: amazon/aws-otel-collector:v0.21.1
+    container_name: otel-collector
+    command: [ "--config=/etc/otel-collector-config.yaml" ]
+    volumes:
+      - ./otel-config.yaml:/etc/otel-collector-config.yaml
+    ports:
+      - "1888:1888"   # pprof extension
+      - "13133:13133" # health_check extension
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+      - "55670:55679" # zpages extension
+    expose:
+      - "4317"
+      - "4318"
+    networks:
+      - ecom
+
+  filebeat:
+    container_name: filebeat
+    image: docker.elastic.co/beats/filebeat:7.17.4
+    command: ["--strict.perms=false"]
+    depends_on:
+      - logstash
+    volumes:
+      - ecom-data:/tomcat/logs
+      - ./filebeat.yml:/usr/share/filebeat/filebeat.yml
+    depends_on:
+      - ecom-main
+      
+  ecom-main:
+    image: ecom-main:latest
+    container_name: ecom-main
+    volumes:
+      - ecom-data:/tomcat/logs
+    ports:
+      - "8080:8080"   # pprof extension
+    expose:
+      - "8080"
+    depends_on:
+      - otel-collector
+      - ecom-user
+    networks:
+      - ecom
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=ecom-main,service.namespace=ECom
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_JAVAAGENT_DEBUG=false
+      - ECOM_LOG_DIR=/tomcat/logs
+      - ECOM_USER_SERVICE=http://ecom-user:8080
+      - ECOM_PAYMENT_SERVICE=http://ecom-payment:8080
+
+  ecom-user:
+    image: ecom-user:latest
+    container_name: ecom-user
+    volumes:
+      - ecom-data:/tomcat/logs
+    networks:
+      - ecom
+    depends_on:
+      - otel-collector
+      - ecom-user-address
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=ecom-user,service.namespace=ECom
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_JAVAAGENT_DEBUG=false
+      - ECOM_LOG_DIR=/tomcat/logs
+      - ECOM_USER_ADDRESS_SERVICE=http://ecom-user-address:8080
+      
+  ecom-user-address:
+    image: ecom-user-address:latest
+    container_name: ecom-user-address 
+    volumes:
+      - ecom-data:/tomcat/logs
+    networks:
+      - ecom
+    depends_on:
+      - otel-collector
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=ecom-user-address,service.namespace=ECom
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_JAVAAGENT_DEBUG=false
+      - ECOM_LOG_DIR=/tomcat/logs
+         
+  ecom-payment:
+    image: ecom-payment:latest
+    container_name: ecom-payment 
+    volumes:
+      - ecom-data:/tomcat/logs
+    networks:
+      - ecom
+    depends_on:
+      - otel-collector
+    environment:
+      - OTEL_RESOURCE_ATTRIBUTES=service.name=ecom-payment,service.namespace=ECom
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otel-collector:4317
+      - OTEL_TRACES_EXPORTER=otlp
+      - OTEL_METRICS_EXPORTER=none
+      - OTEL_JAVAAGENT_DEBUG=false
+      - ECOM_LOG_DIR=/tomcat/logs
+      - ECOM_USER_SERVICE=http://ecom-user:8080
+      
+volumes:
+  ecom-data:
+     
+networks:
+  ecom:
+  
