@@ -3,7 +3,7 @@ entry-pipeline:
   source:
     otel_trace_source:
       ssl: false
-      record_type: event
+#       record_type: event
   sink:
     - pipeline:
         name: "raw-pipeline"
@@ -17,7 +17,7 @@ raw-pipeline:
   sink:
     - opensearch:
         hosts: 
-          - "https://192.168.29.151:9200"
+          - "https://fedora:9200"
         insecure: true
         username: "admin"
         password: "admin"
@@ -32,7 +32,7 @@ service-map-pipeline:
   sink:
     - opensearch:
         hosts: 
-          - "https://192.168.29.151:9200"
+          - "https://fedora:9200"
         insecure: true
         username: "admin"
         password: "admin"

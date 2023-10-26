@@ -10,7 +10,7 @@ processors:
   
 exporters:
   otlp/data-prepper:
-    endpoint: 192.168.29.151:21890
+    endpoint: fedora:21890
     tls:
       insecure: true
 

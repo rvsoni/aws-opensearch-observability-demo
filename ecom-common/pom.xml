@@ -13,8 +13,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>ECom Commons</name>
 	<description>Microservice Observability Demo</description>
+	<!--
 	<properties>
 		<java.version>11</java.version>
 	</properties>
-
+	-->
 </project>

@@ -5,10 +5,10 @@ spring:
   application:
     name: ecom-user-address
   datasource:
-    url: jdbc:postgresql://192.168.29.151:5432/ecom
-    password: ecom
-    username: ecom
-
+    url: ${ECOM_DB_URL}
+    password: ${ECOM_DB_USER}
+    username: ${ECOM_DB_PASSWORD}
+    
   jpa:
     database: postgresql
     generate-ddl: true

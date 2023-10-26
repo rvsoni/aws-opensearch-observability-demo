@@ -1,10 +1,10 @@
 services:
  
   data-prepper:
-    image: opensearchproject/data-prepper:1.5.1
-    volumes:  
-      - ./data-prepper-pipelines.yml:/usr/share/data-prepper/pipelines.yaml
-      - ./data-prepper-config.yml:/usr/share/data-prepper/data-prepper-config.yaml
+    image: opensearchproject/data-prepper:2.5.0
+    volumes:
+      - ./data-prepper-pipelines.yml:/usr/share/data-prepper/pipelines/pipelines.yaml
+      - ./data-prepper-config.yml:/usr/share/data-prepper/config/data-prepper-config.yaml
     ports:
       - 21890:21890
       - 21891:21891

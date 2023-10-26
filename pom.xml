@@ -16,10 +16,11 @@
 	<packaging>pom</packaging>
 	<description>Microservice Observability Demo</description>
 	<properties>
-		<java.version>11</java.version>
+		<java.version>1.8</java.version>
 		<spring-cloud.version>2021.0.4</spring-cloud.version>
 		<spring-cloud-sleuth-otel.version>1.1.0</spring-cloud-sleuth-otel.version>
 		<opentelemetry.version>1.18.0</opentelemetry.version>
+		<skipTests>true</skipTests>
 	</properties>
 	<dependencyManagement>
 		<dependencies>

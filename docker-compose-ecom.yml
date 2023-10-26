@@ -1,7 +1,7 @@
 services:
 
   otel-collector:
-    image: amazon/aws-otel-collector:v0.21.1
+    image: amazon/aws-otel-collector:v0.34.0
     container_name: otel-collector
     command: [ "--config=/etc/otel-collector-config.yaml" ]
     volumes:
@@ -72,6 +72,9 @@ services:
       - OTEL_JAVAAGENT_DEBUG=false
       - ECOM_LOG_DIR=/tomcat/logs
       - ECOM_USER_ADDRESS_SERVICE=http://ecom-user-address:8080
+      - ECOM_DB_URL=jdbc:postgresql://fedora:5432/ecom
+      - ECOM_DB_USER=ecom
+      - ECOM_DB_PASSWORD=ecom
       
   ecom-user-address:
     image: ecom-user-address:latest
@@ -89,6 +92,9 @@ services:
       - OTEL_METRICS_EXPORTER=none
       - OTEL_JAVAAGENT_DEBUG=false
       - ECOM_LOG_DIR=/tomcat/logs
+      - ECOM_DB_URL=jdbc:postgresql://fedora:5432/ecom
+      - ECOM_DB_USER=ecom
+      - ECOM_DB_PASSWORD=ecom
          
   ecom-payment:
     image: ecom-payment:latest
@@ -107,6 +113,9 @@ services:
       - OTEL_JAVAAGENT_DEBUG=false
       - ECOM_LOG_DIR=/tomcat/logs
       - ECOM_USER_SERVICE=http://ecom-user:8080
+      - ECOM_DB_URL=jdbc:postgresql://fedora:5432/ecom
+      - ECOM_DB_USER=ecom
+      - ECOM_DB_PASSWORD=ecom
       
 volumes:
   ecom-data:
